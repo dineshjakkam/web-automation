@@ -8,7 +8,7 @@ class WesternUnionRate:
         self.tab.get("https://www.compareremit.com/money-transfer-companies/western-union/")
 
     def get_rate(self):
-        elements = self.tab.find_elements_by_class_name("col-sm-4.exchange-rate-1.none_border")
+        elements = self.tab.find_element_by_css_selector(".col-sm-4.exchange-rate-1.none_border")
         for element in elements:
             if "IND" in element.text:
                 return float(element.text[10:15])

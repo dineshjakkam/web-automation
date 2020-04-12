@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a60f1c1d-62e7-4588-8abc-a4c81e36da74" name="Default Changelist" comment="" />
+    <list default="true" id="a60f1c1d-62e7-4588-8abc-a4c81e36da74" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/compare_remittance.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/compare_remittance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/browser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/browser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/remittance/ria.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/remittance/ria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/remittance/western_union.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/remittance/western_union.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,6 +18,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1aKo8zcz4NvbHLLGAE6ygCPQNcA" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -47,5 +54,16 @@
       <updated>1586493490690</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

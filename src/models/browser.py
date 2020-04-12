@@ -1,4 +1,5 @@
 import os
+import platform
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -41,8 +42,12 @@ class Browser:
 
         driver_path = get_pwd() + "/chromedriver"
 
-        if os.path.exists(driver_path):
+        if platform.machine() == "Darwin" and os.path.exists(driver_path):
             tab = webdriver.Chrome(executable_path=driver_path, options=chrome_options)
+            self.__class__._tabs.append(tab)
+            return tab
+        elif not platform.machine() == "Darwin":
+            tab = webdriver.Chrome(options=chrome_options)
             self.__class__._tabs.append(tab)
             return tab
         else:
