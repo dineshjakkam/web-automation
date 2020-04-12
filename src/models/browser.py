@@ -42,11 +42,11 @@ class Browser:
 
         driver_path = get_pwd() + "/chromedriver"
 
-        if platform.machine() == "Darwin" and os.path.exists(driver_path):
+        if platform.system() == 'Darwin' and os.path.exists(driver_path):
             tab = webdriver.Chrome(executable_path=driver_path, options=chrome_options)
             self.__class__._tabs.append(tab)
             return tab
-        elif not platform.machine() == "Darwin":
+        elif not platform.system() == 'Darwin':
             tab = webdriver.Chrome(options=chrome_options)
             self.__class__._tabs.append(tab)
             return tab

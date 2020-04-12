@@ -7,7 +7,7 @@ class RiaRate:
     def get_rate(self):
         while True:
             try:
-                elem = self.tab.find_element_by_css_selector(".sc-giOsra.bxRkOK")
+                elem = self.tab.find_elements_by_css_selector(".sc-giOsra.bxRkOK")[0]
                 if len(elem.text[15:]) == 10:
                     raise ValueError
                 else:
