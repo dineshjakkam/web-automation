@@ -1,5 +1,8 @@
-import pystore
 import os
+
+
+class pystore:
+    pass
 
 
 class DataBase:
@@ -24,7 +27,3 @@ class DataBase:
                 self.collection.write(key, df)
         except Exception as e:
             print("Exception in write_value {}".format(e))
-
-
-
-
