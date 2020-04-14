@@ -30,7 +30,7 @@ def remitly_value():
             remitly_df = pd.DataFrame(columns=['datetime', 'value'])
         logging.debug("{} -> {}".format("Remitly", rate))
     except Exception as e:
-        print(e)
+        logging.debug("remitly error: {}".format(e))
 
 
 def xoom_value():
@@ -46,7 +46,7 @@ def xoom_value():
             xoom_df = pd.DataFrame(columns=['datetime', 'value'])
         logging.debug("{} -> {}".format("Xoom", rate))
     except Exception as e:
-        print(e)
+        logging.debug("xoom error: {}".format(e))
 
 
 def ria_value():
@@ -62,7 +62,7 @@ def ria_value():
             ria_df = pd.DataFrame(columns=['datetime', 'value'])
         logging.debug("{} -> {}".format("Ria", rate))
     except Exception as e:
-        print(e)
+        logging.debug("ria error: {}".format(e))
 
 
 def wu_value():
@@ -78,7 +78,7 @@ def wu_value():
             wu_df = pd.DataFrame(columns=['datetime', 'value'])
         logging.debug("{} -> {}".format("WesternUnion", rate))
     except Exception as e:
-        print(e)
+        logging.debug("wu error: {}".format(e))
 
 
 def google_value():
@@ -94,7 +94,7 @@ def google_value():
             exchange_df = pd.DataFrame(columns=['datetime', 'value'])
         logging.debug("{} -> {}".format("Current exchange rate", float(element.text[:5])))
     except Exception as e:
-        print(e)
+        logging.debug("google error: {}".format(e))
 
 
 def main():
@@ -123,10 +123,6 @@ def main():
 
             for thread in threads:
                 thread.start()
-                time.sleep(1)
-
-            for thread in threads:
-                thread.join()
 
         except:
             return
