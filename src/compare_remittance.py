@@ -3,6 +3,7 @@ from pytz import timezone
 from threading import Thread
 import pandas as pd
 import datetime
+import logging
 
 from models.remittance import RemitlyRate, XoomRate, WesternUnionRate, RiaRate
 from models import Browser, GoogleSearch
@@ -13,70 +14,87 @@ xoom_prev_value = 0
 ria_prev_value = 0
 wu_prev_value = 0
 
+logging.basicConfig(filename='remittance.log', level=logging.DEBUG)
+
 
 def remitly_value():
-    global remitly_df, remitly_prev_value
-    tab = browser.open_new_tab(incognito=True, headless=True)
-    rate = RemitlyRate(tab).get_rate()
-    if not rate == remitly_prev_value:
-        remitly_prev_value = rate
-        new_value = {'datetime': datetime.datetime.now(), 'value': rate}
-        remitly_df = remitly_df.append(new_value, ignore_index=True)
-        bucket.save_to_s3(file_name="remitly/"+str(datetime.datetime.now()) + ".csv", src_data=remitly_df)
-        remitly_df = pd.DataFrame(columns=['datetime', 'value'])
-    print("{} -> {}".format("Remitly", rate))
+    try:
+        global remitly_df, remitly_prev_value
+        tab = browser.open_new_tab(incognito=True, headless=True)
+        rate = RemitlyRate(tab).get_rate()
+        if not rate == remitly_prev_value:
+            remitly_prev_value = rate
+            new_value = {'datetime': datetime.datetime.now(), 'value': rate}
+            remitly_df = remitly_df.append(new_value, ignore_index=True)
+            bucket.save_to_s3(file_name="remitly/"+str(datetime.datetime.now()) + ".csv", src_data=remitly_df)
+            remitly_df = pd.DataFrame(columns=['datetime', 'value'])
+        logging.debug("{} -> {}".format("Remitly", rate))
+    except Exception as e:
+        print(e)
 
 
 def xoom_value():
-    global xoom_prev_value, xoom_df
-    tab = browser.open_new_tab(incognito=True, headless=True)
-    rate = XoomRate(tab).get_rate()
-    if not rate == xoom_prev_value:
-        xoom_prev_value = rate
-        new_value = {'datetime': datetime.datetime.now(), 'value': rate}
-        xoom_df = xoom_df.append(new_value, ignore_index=True)
-        bucket.save_to_s3(file_name="xoom/"+str(datetime.datetime.now()) + ".csv", src_data=xoom_df)
-        xoom_df = pd.DataFrame(columns=['datetime', 'value'])
-    print("{} -> {}".format("Xoom", rate))
+    try:
+        global xoom_prev_value, xoom_df
+        tab = browser.open_new_tab(incognito=True, headless=True)
+        rate = XoomRate(tab).get_rate()
+        if not rate == xoom_prev_value:
+            xoom_prev_value = rate
+            new_value = {'datetime': datetime.datetime.now(), 'value': rate}
+            xoom_df = xoom_df.append(new_value, ignore_index=True)
+            bucket.save_to_s3(file_name="xoom/"+str(datetime.datetime.now()) + ".csv", src_data=xoom_df)
+            xoom_df = pd.DataFrame(columns=['datetime', 'value'])
+        logging.debug("{} -> {}".format("Xoom", rate))
+    except Exception as e:
+        print(e)
 
 
 def ria_value():
-    global ria_prev_value, ria_df
-    tab = browser.open_new_tab(incognito=True, headless=True)
-    rate = RiaRate(tab).get_rate()
-    if not rate == ria_prev_value:
-        ria_prev_value = rate
-        new_value = {'datetime': datetime.datetime.now(), 'value': rate}
-        ria_df = ria_df.append(new_value, ignore_index=True)
-        bucket.save_to_s3(file_name="ria/"+str(datetime.datetime.now()) + ".csv", src_data=ria_df)
-        ria_df = pd.DataFrame(columns=['datetime', 'value'])
-    print("{} -> {}".format("Ria", rate))
+    try:
+        global ria_prev_value, ria_df
+        tab = browser.open_new_tab(incognito=True, headless=True)
+        rate = RiaRate(tab).get_rate()
+        if not rate == ria_prev_value:
+            ria_prev_value = rate
+            new_value = {'datetime': datetime.datetime.now(), 'value': rate}
+            ria_df = ria_df.append(new_value, ignore_index=True)
+            bucket.save_to_s3(file_name="ria/"+str(datetime.datetime.now()) + ".csv", src_data=ria_df)
+            ria_df = pd.DataFrame(columns=['datetime', 'value'])
+        logging.debug("{} -> {}".format("Ria", rate))
+    except Exception as e:
+        print(e)
 
 
 def wu_value():
-    global wu_prev_value, wu_df
-    tab = browser.open_new_tab(incognito=True, headless=True)
-    rate = WesternUnionRate(tab).get_rate()
-    if not rate == wu_prev_value:
-        wu_prev_value = rate
-        new_value = {'datetime': datetime.datetime.now(), 'value': rate}
-        wu_df = wu_df.append(new_value, ignore_index=True)
-        bucket.save_to_s3(file_name="western_union/"+str(datetime.datetime.now()) + ".csv", src_data=wu_df)
-        wu_df = pd.DataFrame(columns=['datetime', 'value'])
-    print("{} -> {}".format("WesternUnion", rate))
+    try:
+        global wu_prev_value, wu_df
+        tab = browser.open_new_tab(incognito=True, headless=True)
+        rate = WesternUnionRate(tab).get_rate()
+        if not rate == wu_prev_value:
+            wu_prev_value = rate
+            new_value = {'datetime': datetime.datetime.now(), 'value': rate}
+            wu_df = wu_df.append(new_value, ignore_index=True)
+            bucket.save_to_s3(file_name="western_union/"+str(datetime.datetime.now()) + ".csv", src_data=wu_df)
+            wu_df = pd.DataFrame(columns=['datetime', 'value'])
+        logging.debug("{} -> {}".format("WesternUnion", rate))
+    except Exception as e:
+        print(e)
 
 
 def google_value():
-    global exchange_df
-    tab = browser.open_new_tab(incognito=True, headless=True)
-    GoogleSearch(tab).search("USD to INR")
-    element = tab.find_element_by_css_selector(".dDoNo.vk_bk.gsrt")
-    new_value = {'datetime': datetime.datetime.now(), 'value': float(element.text[:5])}
-    exchange_df = exchange_df.append(new_value, ignore_index=True)
-    if exchange_df.size > 30:
-        bucket.save_to_s3(file_name="exchange/"+str(datetime.datetime.now()) + ".csv", src_data=exchange_df)
-        exchange_df = pd.DataFrame(columns=['datetime', 'value'])
-    print("{} -> {}".format("Current exchange rate", float(element.text[:5])))
+    try:
+        global exchange_df
+        tab = browser.open_new_tab(incognito=True, headless=True)
+        GoogleSearch(tab).search("USD to INR")
+        element = tab.find_element_by_css_selector(".dDoNo.vk_bk.gsrt")
+        new_value = {'datetime': datetime.datetime.now(), 'value': float(element.text[:5])}
+        exchange_df = exchange_df.append(new_value, ignore_index=True)
+        if exchange_df.size > 30:
+            bucket.save_to_s3(file_name="exchange/"+str(datetime.datetime.now()) + ".csv", src_data=exchange_df)
+            exchange_df = pd.DataFrame(columns=['datetime', 'value'])
+        logging.debug("{} -> {}".format("Current exchange rate", float(element.text[:5])))
+    except Exception as e:
+        print(e)
 
 
 def main():
