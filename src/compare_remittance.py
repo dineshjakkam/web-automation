@@ -82,7 +82,7 @@ def google_value():
 def main():
     prev_time = time.time()
     while True:
-        if prev_time + 2 > time.time():
+        if prev_time + 180 > time.time():
             continue
         else:
             prev_time = time.time()
