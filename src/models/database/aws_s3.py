@@ -16,8 +16,8 @@ class S3Bucket:
                  bucket_name: str):
         self.bucket_name = bucket_name
         self.client = boto3.client('s3',
-                                   aws_access_key_id="AKIA5RO4IS2EOVLSGRTP",
-                                   aws_secret_access_key="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",
+                                   aws_access_key_id=os.environ.get("WA_AWS_KEY_ID"),
+                                   aws_secret_access_key=os.environ.get("WA_AWS_SECRET_KEY"),
                                    region_name='us-east-1')
 
     def save_to_s3(self,
