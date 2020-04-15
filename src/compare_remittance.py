@@ -56,7 +56,7 @@ def ria_value():
     try:
         global ria_prev_value, ria_df
         rate = RiaRate(tab).get_rate()
-        if not rate == ria_prev_value:
+        if rate is not None and not rate == ria_prev_value:
             ria_prev_value = rate
             new_value = {'datetime': datetime.datetime.now(), 'value': rate}
             ria_df = ria_df.append(new_value, ignore_index=True)
@@ -89,7 +89,7 @@ def google_value():
         element = tab.find_element_by_css_selector(".dDoNo.vk_bk.gsrt")
         new_value = {'datetime': datetime.datetime.now(), 'value': float(element.text[:5])}
         exchange_df = exchange_df.append(new_value, ignore_index=True)
-        if exchange_df.size > 1:
+        if exchange_df.size > 30:
             bucket.save_to_s3(file_name="exchange/"+str(datetime.datetime.now()) + ".csv", src_data=exchange_df)
             exchange_df = pd.DataFrame(columns=['datetime', 'value'])
         logger.debug("{} -> {}".format("Current exchange rate", float(element.text[:5])))
