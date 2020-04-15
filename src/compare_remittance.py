@@ -25,7 +25,6 @@ logger.addHandler(handler)
 def remitly_value():
     try:
         global remitly_df, remitly_prev_value
-        tab = browser.open_new_tab(incognito=True, headless=True)
         rate = RemitlyRate(tab).get_rate()
         if not rate == remitly_prev_value:
             remitly_prev_value = rate
@@ -41,7 +40,6 @@ def remitly_value():
 def xoom_value():
     try:
         global xoom_prev_value, xoom_df
-        tab = browser.open_new_tab(incognito=True, headless=True)
         rate = XoomRate(tab).get_rate()
         if not rate == xoom_prev_value:
             xoom_prev_value = rate
@@ -57,7 +55,6 @@ def xoom_value():
 def ria_value():
     try:
         global ria_prev_value, ria_df
-        tab = browser.open_new_tab(incognito=True, headless=True)
         rate = RiaRate(tab).get_rate()
         if not rate == ria_prev_value:
             ria_prev_value = rate
@@ -73,7 +70,6 @@ def ria_value():
 def wu_value():
     try:
         global wu_prev_value, wu_df
-        tab = browser.open_new_tab(incognito=True, headless=True)
         rate = WesternUnionRate(tab).get_rate()
         if not rate == wu_prev_value:
             wu_prev_value = rate
@@ -89,7 +85,6 @@ def wu_value():
 def google_value():
     try:
         global exchange_df
-        tab = browser.open_new_tab(incognito=True, headless=True)
         GoogleSearch(tab).search("USD to INR")
         element = tab.find_element_by_css_selector(".dDoNo.vk_bk.gsrt")
         new_value = {'datetime': datetime.datetime.now(), 'value': float(element.text[:5])}
@@ -128,12 +123,12 @@ def main():
 
             for thread in threads:
                 thread.start()
+                thread.join()
 
         except:
             return
         finally:
-            time.sleep(30)
-            browser.close_all_tabs()
+            time.sleep(10)
 
 
 bucket = S3Bucket("com-remittance-data")
@@ -145,4 +140,5 @@ wu_df = pd.DataFrame(columns=['datetime', 'value'])
 exchange_df = pd.DataFrame(columns=['datetime', 'value'])
 tz = timezone('EST')
 browser = Browser()
+tab = browser.open_new_tab(incognito=True, headless=True)
 main()
