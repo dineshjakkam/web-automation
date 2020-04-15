@@ -18,7 +18,7 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler = logging.FileHandler(filename='log/remittance.log')
 handler.setFormatter(formatter)
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.ERROR)
 logger.addHandler(handler)
 
 
@@ -32,9 +32,9 @@ def remitly_value():
             remitly_df = remitly_df.append(new_value, ignore_index=True)
             bucket.save_to_s3(file_name="remitly/"+str(datetime.datetime.now()) + ".csv", src_data=remitly_df)
             remitly_df = pd.DataFrame(columns=['datetime', 'value'])
-        logger.debug("{} -> {}".format("Remitly", rate))
+        logger.error("{} -> {}".format("Remitly", rate))
     except Exception as e:
-        logger.debug("remitly error: {}".format(e))
+        logger.error("remitly error: {}".format(e))
 
 
 def xoom_value():
@@ -47,9 +47,9 @@ def xoom_value():
             xoom_df = xoom_df.append(new_value, ignore_index=True)
             bucket.save_to_s3(file_name="xoom/"+str(datetime.datetime.now()) + ".csv", src_data=xoom_df)
             xoom_df = pd.DataFrame(columns=['datetime', 'value'])
-        logger.debug("{} -> {}".format("Xoom", rate))
+        logger.error("{} -> {}".format("Xoom", rate))
     except Exception as e:
-        logger.debug("xoom error: {}".format(e))
+        logger.error("xoom error: {}".format(e))
 
 
 def ria_value():
@@ -62,9 +62,9 @@ def ria_value():
             ria_df = ria_df.append(new_value, ignore_index=True)
             bucket.save_to_s3(file_name="ria/"+str(datetime.datetime.now()) + ".csv", src_data=ria_df)
             ria_df = pd.DataFrame(columns=['datetime', 'value'])
-        logger.debug("{} -> {}".format("Ria", rate))
+        logger.error("{} -> {}".format("Ria", rate))
     except Exception as e:
-        logger.debug("ria error: {}".format(e))
+        logger.error("ria error: {}".format(e))
 
 
 def wu_value():
@@ -77,9 +77,9 @@ def wu_value():
             wu_df = wu_df.append(new_value, ignore_index=True)
             bucket.save_to_s3(file_name="western_union/"+str(datetime.datetime.now()) + ".csv", src_data=wu_df)
             wu_df = pd.DataFrame(columns=['datetime', 'value'])
-        logger.debug("{} -> {}".format("WesternUnion", rate))
+        logger.error("{} -> {}".format("WesternUnion", rate))
     except Exception as e:
-        logger.debug("wu error: {}".format(e))
+        logger.error("wu error: {}".format(e))
 
 
 def google_value():
@@ -92,9 +92,9 @@ def google_value():
         if exchange_df.size > 30:
             bucket.save_to_s3(file_name="exchange/"+str(datetime.datetime.now()) + ".csv", src_data=exchange_df)
             exchange_df = pd.DataFrame(columns=['datetime', 'value'])
-        logger.debug("{} -> {}".format("Current exchange rate", float(element.text[:5])))
+        logger.error("{} -> {}".format("Current exchange rate", float(element.text[:5])))
     except Exception as e:
-        logger.debug("google error: {}".format(e))
+        logger.error("google error: {}".format(e))
 
 
 def main():
