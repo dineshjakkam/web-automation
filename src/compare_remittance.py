@@ -128,7 +128,7 @@ def main():
         except:
             return
         finally:
-            time.sleep(10)
+            time.sleep(180)
 
 
 bucket = S3Bucket("com-remittance-data")
