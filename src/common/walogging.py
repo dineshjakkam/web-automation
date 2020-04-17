@@ -65,7 +65,6 @@ class WALogger:
             return file_handler
         except IOError as e:
             print(e)
-            pass
 
     @staticmethod
     def set_logger(logger):

@@ -1,4 +1,7 @@
 from remittance import AmountRange, TransferType
+from common import WALogger
+
+logger = WALogger.get_logger()
 
 
 class RemitlyRate:
@@ -7,6 +10,7 @@ class RemitlyRate:
     """
 
     def __init__(self, tab):
+        logger.debug("Fetching remitly rate")
         self.tab = tab
         self.tab.get("https://www.remitly.com/us/en/india")
 
@@ -67,6 +71,10 @@ class RemitlyRate:
         Fetch rate and makes dictionary with amount range and transfer type
         :return: Dictionary of rate values
         """
-        self.fetch_economy_rate()
-        self.fetch_express_rate()
-        return self.return_value
+        try:
+            self.fetch_economy_rate()
+            self.fetch_express_rate()
+            return self.return_value
+        except Exception as e:
+            logger.error("Exception in remitly fetch: {}".format(e))
+
