@@ -1,0 +1,1 @@
+from .remitly import RemitlyRate
