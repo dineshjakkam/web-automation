@@ -1,18 +1,25 @@
+import time
+
 from remittance import AmountRange, TransferType
 from common import WALogger
 
 logger = WALogger.get_logger()
 
 
-class RemitlyRate:
+class RiaRate:
     """
-    Fetches remitly rate
+    Fetches Ria rate
     """
 
     def __init__(self, tab):
-        logger.debug("Fetching remitly rate")
+        """
+        Instantiate Ria class object
+        :param tab: Browser tab with selenium and chrome driver
+        """
+        logger.debug("Fetching ria rate")
         self.tab = tab
-        self.tab.get("https://www.remitly.com/us/en/india")
+        self.tab.get("https://www.riamoneytransfer.com/us/en/send-money-to-india")
+        self.raw_rate = None
 
         self.express_rate = {
             AmountRange.v_0_to_499.value: None,
@@ -31,13 +38,35 @@ class RemitlyRate:
         self.return_value = {TransferType.bank_account.value: self.economy_rate,
                              TransferType.debit_card.value: self.express_rate}
 
+    def fetch_raw_rate(self):
+        """
+        Fetch ria raw rate
+        :return: return raw rate without fee
+        """
+        retries = 100
+        while True and retries:
+            time.sleep(0.1)
+            try:
+                elem = self.tab.find_elements_by_css_selector(".sc-giOsra.bxRkOK")[0]
+                if len(elem.text[15:]) == 10:
+                    raise ValueError
+                else:
+                    self.raw_rate = float(elem.text[26:31])
+                    break
+            except (IndexError, ValueError):
+                retries -= 1
+                pass
+
     def fetch_economy_rate(self):
         """
-        Fetch remitly economy rate
+        Fetch ria economy rate
         :return: float rate value
         """
-        element = self.tab.find_elements_by_class_name('f1smo2ix')[2]
-        rate = element.text[1:]
+        if self.raw_rate is None:
+            self.fetch_raw_rate()
+
+        rate = '{0:.{1}f}'.format((1000 * self.raw_rate) / 1001, 2)
+
         self.economy_rate[AmountRange.v_0_to_499.value] = rate
         self.economy_rate[AmountRange.v_500_to_999.value] = rate
         self.economy_rate[AmountRange.v_1000_to_1999.value] = rate
@@ -45,11 +74,14 @@ class RemitlyRate:
 
     def fetch_express_rate(self):
         """
-        Fetch remitly express rate
+        Fetch ria express rate
         :return:
         """
-        element = self.tab.find_elements_by_class_name('f1smo2ix')[0]
-        rate = element.text[1:]
+        if self.raw_rate is None:
+            self.fetch_raw_rate()
+
+        rate = '{0:.{1}f}'.format((1000 * self.raw_rate) / 1001, 2)
+
         self.express_rate[AmountRange.v_0_to_499.value] = rate
         self.express_rate[AmountRange.v_500_to_999.value] = rate
         self.express_rate[AmountRange.v_1000_to_1999.value] = rate
@@ -65,5 +97,5 @@ class RemitlyRate:
             self.fetch_express_rate()
             return self.return_value
         except Exception as e:
-            logger.error("Exception in remitly fetch: {}".format(e))
+            logger.error("Exception in ria fetch: {}".format(e))
 

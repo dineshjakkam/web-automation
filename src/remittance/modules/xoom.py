@@ -4,15 +4,19 @@ from common import WALogger
 logger = WALogger.get_logger()
 
 
-class RemitlyRate:
+class XoomRate:
     """
-    Fetches remitly rate
+    Fetches xoom rate
     """
+    _previous_rate = None
 
     def __init__(self, tab):
-        logger.debug("Fetching remitly rate")
+        """
+        Instantiate xoom class object
+        :param tab: Browser tab with selenium and chrome driver
+        """
+        logger.debug("Fetching xoom rate")
         self.tab = tab
-        self.tab.get("https://www.remitly.com/us/en/india")
 
         self.express_rate = {
             AmountRange.v_0_to_499.value: None,
@@ -31,29 +35,31 @@ class RemitlyRate:
         self.return_value = {TransferType.bank_account.value: self.economy_rate,
                              TransferType.debit_card.value: self.express_rate}
 
-    def fetch_economy_rate(self):
+    def fetch_high_amount_rate(self):
         """
-        Fetch remitly economy rate
+        Fetch xoom economy rate
         :return: float rate value
         """
-        element = self.tab.find_elements_by_class_name('f1smo2ix')[2]
-        rate = element.text[1:]
-        self.economy_rate[AmountRange.v_0_to_499.value] = rate
-        self.economy_rate[AmountRange.v_500_to_999.value] = rate
+        self.tab.get("https://www.xoom.com/india/send-money")
+        element = self.tab.find_element_by_class_name('js-exchange-rate')
+        rate = element.text[8:14]
+        self.express_rate[AmountRange.v_1000_to_1999.value] = rate
+        self.express_rate[AmountRange.v_above_2000.value] = rate
         self.economy_rate[AmountRange.v_1000_to_1999.value] = rate
         self.economy_rate[AmountRange.v_above_2000.value] = rate
 
-    def fetch_express_rate(self):
+    def fetch_low_amount_rate(self):
         """
-        Fetch remitly express rate
+        Fetch xoom express rate
         :return:
         """
-        element = self.tab.find_elements_by_class_name('f1smo2ix')[0]
+        self.tab.get("https://www.remitly.com/us/en/india")
+        element = self.tab.find_elements_by_class_name('fa2he18')[0]
         rate = element.text[1:]
         self.express_rate[AmountRange.v_0_to_499.value] = rate
         self.express_rate[AmountRange.v_500_to_999.value] = rate
-        self.express_rate[AmountRange.v_1000_to_1999.value] = rate
-        self.express_rate[AmountRange.v_above_2000.value] = rate
+        self.economy_rate[AmountRange.v_0_to_499.value] = rate
+        self.economy_rate[AmountRange.v_500_to_999.value] = rate
 
     def get_rate(self):
         """
@@ -61,9 +67,8 @@ class RemitlyRate:
         :return: Dictionary of rate values
         """
         try:
-            self.fetch_economy_rate()
-            self.fetch_express_rate()
+            self.fetch_high_amount_rate()
+            self.fetch_low_amount_rate()
             return self.return_value
         except Exception as e:
-            logger.error("Exception in remitly fetch: {}".format(e))
-
+            logger.error("Exception in xoom fetch: {}".format(e))

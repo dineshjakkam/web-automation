@@ -4,15 +4,19 @@ from common import WALogger
 logger = WALogger.get_logger()
 
 
-class RemitlyRate:
+class WesternUnionRate:
     """
-    Fetches remitly rate
+    Fetches Western Union rate
     """
 
     def __init__(self, tab):
-        logger.debug("Fetching remitly rate")
+        """
+        Instantiate WU class object
+        :param tab: Browser tab with selenium and chrome driver
+        """
+        logger.debug("Fetching xoom rate")
         self.tab = tab
-        self.tab.get("https://www.remitly.com/us/en/india")
+        self.tab.get("https://www.compareremit.com/money-transfer-companies/western-union/")
 
         self.express_rate = {
             AmountRange.v_0_to_499.value: None,
@@ -33,11 +37,13 @@ class RemitlyRate:
 
     def fetch_economy_rate(self):
         """
-        Fetch remitly economy rate
+        Fetch WU economy rate
         :return: float rate value
         """
-        element = self.tab.find_elements_by_class_name('f1smo2ix')[2]
-        rate = element.text[1:]
+        elements = self.tab.find_elements_by_css_selector(".col-sm-4.exchange-rate-1.none_border")
+        for element in elements:
+            if "IND" in element.text and "USA" in element.text:
+                rate = element.text[10:15]
         self.economy_rate[AmountRange.v_0_to_499.value] = rate
         self.economy_rate[AmountRange.v_500_to_999.value] = rate
         self.economy_rate[AmountRange.v_1000_to_1999.value] = rate
@@ -45,11 +51,13 @@ class RemitlyRate:
 
     def fetch_express_rate(self):
         """
-        Fetch remitly express rate
+        Fetch WU express rate
         :return:
         """
-        element = self.tab.find_elements_by_class_name('f1smo2ix')[0]
-        rate = element.text[1:]
+        elements = self.tab.find_elements_by_css_selector(".col-sm-4.exchange-rate-1.none_border")
+        for element in elements:
+            if "IND" in element.text and "USA" in element.text:
+                rate = element.text[10:15]
         self.express_rate[AmountRange.v_0_to_499.value] = rate
         self.express_rate[AmountRange.v_500_to_999.value] = rate
         self.express_rate[AmountRange.v_1000_to_1999.value] = rate
@@ -65,5 +73,7 @@ class RemitlyRate:
             self.fetch_express_rate()
             return self.return_value
         except Exception as e:
-            logger.error("Exception in remitly fetch: {}".format(e))
+            logger.error("Exception in WU fetch: {}".format(e))
+
+
 
