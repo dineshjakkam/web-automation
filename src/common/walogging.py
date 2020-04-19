@@ -3,19 +3,19 @@ import logging
 
 from logging.handlers import RotatingFileHandler
 
-from common.utils import touch, ROOT_DIRECTORY
-
-LOGS_DIRECTORY = ROOT_DIRECTORY+'/logs'
-
-if not os.path.exists(LOGS_DIRECTORY):
-    os.mkdir(LOGS_DIRECTORY)
+from common.utils import touch, is_balena
 
 
 class WALogger:
     """Logging module that can persist logs"""
-
-    non_persisted_logs_path = "/tmp/wa.log"
-    persisted_logs_path = LOGS_DIRECTORY+"/wa.log"
+    if is_balena():
+        # Support production ENV
+        non_persisted_logs_path = "/dev/shm/wa.log"
+        persisted_logs_path = "/data/wa.log"
+    else:
+        # Support local run
+        non_persisted_logs_path = "./np_wa.log"
+        persisted_logs_path = "p_wa.log"
 
     @staticmethod
     def init_logger():
