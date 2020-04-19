@@ -8,6 +8,8 @@ from common.utils import touch, is_balena
 
 class WALogger:
     """Logging module that can persist logs"""
+    __logger = None
+
     if is_balena():
         # Support production ENV
         non_persisted_logs_path = "/dev/shm/wa.log"
@@ -76,5 +78,6 @@ class WALogger:
         returns logger
         :return:
         """
-        WALogger.init_logger()
+        if WALogger.__logger is None:
+            WALogger.init_logger()
         return WALogger.__logger

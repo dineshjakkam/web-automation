@@ -4,7 +4,10 @@ import platform
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from common.utils import get_pwd
+from common.utils import get_pwd, is_balena
+from common import WALogger
+
+logger = WALogger.get_logger()
 
 
 class Browser:
@@ -44,16 +47,16 @@ class Browser:
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--ignore-certificate-errors')
 
-        driver_path = get_pwd() + "/chromedriver"
-
-        if platform.system() == 'Darwin' and os.path.exists(driver_path):
+        if not is_balena():
+            driver_path = get_pwd() + "/chromedriver"
             tab = webdriver.Chrome(executable_path=driver_path, options=chrome_options)
-            cls._tabs.append(tab)
-        elif not platform.system() == 'Darwin':
-            tab = webdriver.Chrome(options=chrome_options)
-            cls._tabs.append(tab)
         else:
-            raise ValueError("Web driver not available")
+            try:
+                tab = webdriver.Chrome(options=chrome_options)
+            except:
+                logger.error("Chrome driver not found")
+
+        cls._tabs.append(tab)
 
         return tab
 

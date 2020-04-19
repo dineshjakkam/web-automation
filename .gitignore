@@ -2,3 +2,5 @@
 .idea/*
 mydatastore/*
 .DS_Store
+*.log
+chromedriver

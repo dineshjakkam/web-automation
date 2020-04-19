@@ -22,5 +22,5 @@ def is_balena():
     Check if the environment is Balena
     :return: True if Balena
     """
-    return os.get.environ("BALENA")
+    return os.environ.get("BALENA")
 

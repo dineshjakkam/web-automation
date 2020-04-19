@@ -1,8 +1,10 @@
 """
 https://www.w3schools.com/cssref/css_colors.asp: CSS colors
-<div>Logo made by <a href="https://www.designevo.com/logo-maker/" title="Free Online Logo Maker">DesignEvo free logo creator</a></div>
+PYTHONPATH=. ~/.pyenv/versions/3.7.0/envs/myproject/bin/python3.7 remittance/main.py
 """
 
+import os
+import time
 from PIL import Image, ImageDraw, ImageFilter
 
 from common import Browser, WALogger
@@ -49,6 +51,25 @@ def build_image(tab):
     rgb_im.save("final_image.jpg")
 
 
+def loop(tab):
+    """
+    Run this in loop
+    :return:
+    """
+    try:
+        logger.debug("Entering next round polling")
+        all_rates = AllRates()
+        all_rates.fetch_all_rates(tab)
+        status = all_rates.check_if_values_changes()
+        if status:
+            logger.debug("Values changed status: {}".format(status))
+            build_new_html_page(all_rates)
+            build_image(tab)
+            InstaBot().post_picture()
+    except Exception as e:
+        logger.error("Exception in loop: {}".format(e))
+
+
 def main():
     """
     TO run this file sourcing root as src
@@ -56,15 +77,13 @@ def main():
     :return:
     """
     try:
+        logger.error("=== Starting application ===")
         tab = Browser.open_new_tab(incognito=True, headless=True)
-        all_rates = AllRates()
-        all_rates.fetch_all_rates(tab)
-        status = all_rates.check_if_values_changes()
-        if status:
-            logger.debug("Values changes status: {}".format(status))
-            build_new_html_page(all_rates)
-            build_image(tab)
-            InstaBot().post_picture()
+        polling_period = os.environ.get('POLLING_PERIOD', 60)
+        while True:
+            loop(tab)
+            time.sleep(60*polling_period)
+
     except Exception as e:
         print(e)
         logger.error("Main loop crashed: {}".format(e))
