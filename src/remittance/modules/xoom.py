@@ -43,6 +43,8 @@ class XoomRate:
         self.tab.get("https://www.xoom.com/india/send-money")
         element = self.tab.find_element_by_class_name('js-exchange-rate')
         rate = element.text[8:14]
+        if rate is None:
+            raise
         self.express_rate[AmountRange.v_1000_to_1999.value] = rate
         self.express_rate[AmountRange.v_above_2000.value] = rate
         self.economy_rate[AmountRange.v_1000_to_1999.value] = rate
@@ -56,6 +58,8 @@ class XoomRate:
         self.tab.get("https://www.remitly.com/us/en/india")
         element = self.tab.find_elements_by_class_name('fa2he18')[0]
         rate = element.text[1:]
+        if rate is None:
+            raise
         self.express_rate[AmountRange.v_0_to_499.value] = rate
         self.express_rate[AmountRange.v_500_to_999.value] = rate
         self.economy_rate[AmountRange.v_0_to_499.value] = rate
@@ -69,6 +73,8 @@ class XoomRate:
         try:
             self.fetch_high_amount_rate()
             self.fetch_low_amount_rate()
+            XoomRate._previous_rate = self.return_value
             return self.return_value
         except Exception as e:
+            return XoomRate._previous_rate
             logger.error("Exception in xoom fetch: {}".format(e))

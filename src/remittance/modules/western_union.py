@@ -8,6 +8,7 @@ class WesternUnionRate:
     """
     Fetches Western Union rate
     """
+    _previous_rate = None
 
     def __init__(self, tab):
         """
@@ -44,6 +45,8 @@ class WesternUnionRate:
         for element in elements:
             if "IND" in element.text and "USA" in element.text:
                 rate = element.text[10:15]
+        if rate is None:
+            raise
         self.economy_rate[AmountRange.v_0_to_499.value] = rate
         self.economy_rate[AmountRange.v_500_to_999.value] = rate
         self.economy_rate[AmountRange.v_1000_to_1999.value] = rate
@@ -58,6 +61,8 @@ class WesternUnionRate:
         for element in elements:
             if "IND" in element.text and "USA" in element.text:
                 rate = element.text[10:15]
+        if rate is None:
+            raise
         self.express_rate[AmountRange.v_0_to_499.value] = rate
         self.express_rate[AmountRange.v_500_to_999.value] = rate
         self.express_rate[AmountRange.v_1000_to_1999.value] = rate
@@ -71,8 +76,10 @@ class WesternUnionRate:
         try:
             self.fetch_economy_rate()
             self.fetch_express_rate()
+            WesternUnionRate._previous_rate = self.return_value
             return self.return_value
         except Exception as e:
+            return WesternUnionRate._previous_rate
             logger.error("Exception in WU fetch: {}".format(e))
 
 

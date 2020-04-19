@@ -10,6 +10,7 @@ class RiaRate:
     """
     Fetches Ria rate
     """
+    _previous_rate = None
 
     def __init__(self, tab):
         """
@@ -66,6 +67,8 @@ class RiaRate:
             self.fetch_raw_rate()
 
         rate = '{0:.{1}f}'.format((1000 * self.raw_rate) / 1001, 2)
+        if rate is None:
+            raise
 
         self.economy_rate[AmountRange.v_0_to_499.value] = rate
         self.economy_rate[AmountRange.v_500_to_999.value] = rate
@@ -81,6 +84,8 @@ class RiaRate:
             self.fetch_raw_rate()
 
         rate = '{0:.{1}f}'.format((1000 * self.raw_rate) / 1001, 2)
+        if rate is None:
+            raise
 
         self.express_rate[AmountRange.v_0_to_499.value] = rate
         self.express_rate[AmountRange.v_500_to_999.value] = rate
@@ -95,7 +100,9 @@ class RiaRate:
         try:
             self.fetch_economy_rate()
             self.fetch_express_rate()
+            RiaRate._previous_rate = self.return_value
             return self.return_value
         except Exception as e:
+            return RiaRate._previous_rate
             logger.error("Exception in ria fetch: {}".format(e))
 
