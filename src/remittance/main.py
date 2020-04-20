@@ -47,7 +47,16 @@ def build_image(tab):
     right = width*0.525
     # crop image
     im = im.crop((left, top, right, bottom))
-    rgb_im = im.convert('RGB')
+
+    # Add watermark to image
+    watermark = Image.open("remittance/pt_logo/watermark3.png")
+    width, height = im.size
+    transparent = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    transparent.paste(im, (0, 0))
+    transparent.paste(watermark, (0, 0), mask=watermark)
+
+    # Convert .png to .jpg
+    rgb_im = transparent.convert('RGB')
     rgb_im.save("final_image.jpg")
 
 
@@ -58,8 +67,6 @@ def loop(tab):
     """
     try:
         logger.debug("Entering next round polling")
-        InstaBot().post_picture()
-        return
         all_rates = AllRates()
         all_rates.fetch_all_rates(tab)
         status = all_rates.check_if_values_changes()
@@ -81,7 +88,7 @@ def main():
     try:
         logger.error("=== Starting application ===")
         tab = Browser.open_new_tab(incognito=True, headless=True)
-        polling_period = os.environ.get('POLLING_PERIOD', 60)
+        polling_period = os.environ.get('POLLING_PERIOD', 5)
         while True:
             loop(tab)
             time.sleep(60*polling_period)
