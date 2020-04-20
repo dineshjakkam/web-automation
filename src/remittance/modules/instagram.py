@@ -22,6 +22,6 @@ class InstaBot:
         bot = Bot()
         bot.login(username=self.username,
                   password=self.password)
-        text = 'Here you can put your caption for the post'
+        text = "New rate available. Stay tuned for more updates. #usdtoinr #liveupdates #24X7 #predictionssoon #follow"
         bot.upload_photo("final_image.jpg",
                          caption=text)

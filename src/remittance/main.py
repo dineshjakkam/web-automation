@@ -74,7 +74,7 @@ def loop(tab):
             logger.debug("Values changed status: {}".format(status))
             build_new_html_page(all_rates)
             build_image(tab)
-            #InstaBot().post_picture()
+            InstaBot().post_picture()
     except Exception as e:
         logger.error("Exception in loop: {}".format(e))
 
