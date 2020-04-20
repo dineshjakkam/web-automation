@@ -45,9 +45,18 @@ def build_image(tab):
     bottom = height*0.6
     left = 0
     right = width*0.525
-
+    # crop image
     im = im.crop((left, top, right, bottom))
-    rgb_im = im.convert('RGB')
+
+    # Add watermark
+    watermark = Image.open("remittance/pt_logo/watermark2.png")
+    width, height = im.size
+    transparent = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    transparent.paste(im, (0, 0))
+    transparent.paste(watermark, (10, 10), mask=watermark)
+
+    #Convert to jpg
+    rgb_im = transparent.convert('RGB')
     rgb_im.save("final_image.jpg")
 
 
@@ -65,7 +74,7 @@ def loop(tab):
             logger.debug("Values changed status: {}".format(status))
             build_new_html_page(all_rates)
             build_image(tab)
-            InstaBot().post_picture()
+            #InstaBot().post_picture()
     except Exception as e:
         logger.error("Exception in loop: {}".format(e))
 
