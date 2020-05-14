@@ -49,14 +49,16 @@ def build_image(tab):
     im = im.crop((left, top, right, bottom))
 
     # Add watermark to image
+    """
     watermark = Image.open("remittance/pt_logo/watermark3.png")
     width, height = im.size
     transparent = Image.new('RGBA', (width, height), (0, 0, 0, 0))
     transparent.paste(im, (0, 0))
     transparent.paste(watermark, (0, 0), mask=watermark)
+    """
 
     # Convert .png to .jpg
-    rgb_im = transparent.convert('RGB')
+    rgb_im = im.convert('RGB')
     rgb_im.save("final_image.jpg")
 
 
@@ -88,7 +90,7 @@ def main():
     try:
         logger.error("=== Starting application ===")
         tab = Browser.open_new_tab(incognito=True, headless=True)
-        polling_period = os.environ.get('POLLING_PERIOD', 5)
+        polling_period = int(os.environ.get('POLLING_PERIOD', 5))
         while True:
             loop(tab)
             time.sleep(60*polling_period)
