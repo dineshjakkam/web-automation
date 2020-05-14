@@ -1,4 +1,6 @@
-*.txt
 *.pyc
 .idea/*
 mydatastore/*
+.DS_Store
+*.log
+chromedriver

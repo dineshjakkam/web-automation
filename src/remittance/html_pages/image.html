@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal rows that floats next to each other */
+.row {
+  float: left;
+  padding: 10px;
+  width: 52%%
+}
+
+/* Clear floats after the rows */
+.column:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Table styles */
+table {
+  font-family: times-new-roman, sans-serif;
+  border-collapse: collapse;
+  width: 100%%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(odd) {
+  background-color: #FFFFF0;
+}
+</style>
+</head>
+<body>
+
+<div class="column">
+  <div class="row" style="background-color:#CD5C5C;">
+    <h1 align="center">Economy Rates</h1>
+      <h3 align="center">Transfer takes 0-5 Business days</h3>
+        <table>
+          <tr>
+            <th>Provider</th>
+            <th>0$ - 499$ (Fee)</th>
+            <th>500$ - 999$ (Fee)</th>
+            <th>1000$ - 1999$ (Fee)</th>
+            <th>Above 2k$ (Fee)</th>
+          </tr>
+          <tr>
+            <td>Remitlyy</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+          <tr>
+            <td>Riaa</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+          <tr>
+            <td>Xoomm</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+          <tr>
+            <td>Westernn Unionn</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+        </table>
+  </div>
+  <div class="row" style="background-color:#CD5C5C;">
+    <h1 align="center">Express Rates</h1>
+      <h3 align="center">Transfer takes few hours</h3>
+        <table>
+          <tr>
+            <th>Provider</th>
+            <th>0$ - 499$ (Fee)</th>
+            <th>500$ - 999$ (Fee)</th>
+            <th>1000$ - 1999$ (Fee)</th>
+            <th>Above 2k$ (Fee)</th>
+          </tr>
+          <tr>
+            <td>Remitlyy</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+          <tr>
+            <td>Riaa</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+          <tr>
+            <td>Xoomm</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+          <tr>
+            <td>Westernn Unionn</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+            <td>%s (%s $)</td>
+          </tr>
+        </table>
+  </div>
+</div>
+
+</body>
+</html>
