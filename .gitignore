@@ -2,3 +2,8 @@
 *.pyc
 .idea/*
 mydatastore/*
+.DS_Store
+*/.DS_Store
+src/np_wa.log
+src/p_wa.log
+
