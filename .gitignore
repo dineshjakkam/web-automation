@@ -4,5 +4,5 @@ mydatastore/*
 .DS_Store
 *.log
 chromedriver
-
-
+*.txt
+*.json
