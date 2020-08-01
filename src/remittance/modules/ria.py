@@ -48,11 +48,11 @@ class RiaRate:
         while True and retries:
             time.sleep(0.1)
             try:
-                elem = self.tab.find_elements_by_css_selector(".sc-giOsra.bxRkOK")[0]
-                if len(elem.text[15:]) == 10:
-                    raise ValueError
+                elem = self.tab.find_elements_by_class_name('sc-fUdGnz.eVINwC')[0]
+                if not elem:
+                    elem.text[-9:-4]
                 else:
-                    self.raw_rate = float(elem.text[26:31])
+                    self.raw_rate = float(elem.text[-9:-4])
                     break
             except (IndexError, ValueError):
                 retries -= 1

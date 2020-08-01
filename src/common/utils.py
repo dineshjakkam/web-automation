@@ -2,8 +2,11 @@ import os
 
 ROOT_DIRECTORY = "/wa"
 
-if not os.path.exists(ROOT_DIRECTORY):
-    os.mkdir(ROOT_DIRECTORY)
+try:
+    if not os.path.exists(ROOT_DIRECTORY):
+        os.mkdir(ROOT_DIRECTORY)
+except:
+    pass
 
 
 def touch(fname, times=None):
