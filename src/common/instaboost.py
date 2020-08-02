@@ -50,55 +50,46 @@ for hashtag in hashtag_list:
     sleep(randint(1, 2))
     try:
         for x in range(1, 200):
-            username = tab.find_element_by_xpath(
-                '/html/body/div/section/main/div/div/article/div/header/div[2]/div/div/span/a')
-            print(username)
-            print(username.text)
+            username = tab.find_element_by_class_name("e1e1d").find_element_by_tag_name('a').text
 
             if username not in prev_user_list:
                 # If we already follow, do not unfollow
-                if tab.find_element_by_xpath(
-                        '/html/body/div[3]/div/div[2]/div/article/header/div[2]/div[1]/div[2]/button').text == 'Follow':
+                if tab.find_element_by_class_name("bY2yH").find_element_by_tag_name('button').text == 'Follow':
 
-                    tab.find_element_by_xpath(
-                        '/html/body/div[3]/div/div[2]/div/article/header/div[2]/div[1]/div[2]/button').click()
+                    tab.find_element_by_class_name("bY2yH").find_element_by_tag_name('button').click()
 
                     new_followed.append(username)
                     followed += 1
 
                     # Liking the picture
-                    button_like = tab.find_element_by_xpath(
-                        '/html/body/div[3]/div/div[2]/div/article/div[2]/section[1]/span[1]/button/span')
+                    button_like = tab.find_element_by_xpath("//*[name()='svg'][@aria-label='Like']")
 
                     button_like.click()
                     likes += 1
-                    sleep(randint(18, 25))
+                    sleep(randint(5, 10))
 
                     # Comments and tracker
                     comm_prob = randint(1, 10)
                     print('{}_{}: {}'.format(hashtag, x, comm_prob))
-                    if comm_prob > 7:
-                        comments += 1
-                        tab.find_element_by_xpath(
-                            '/html/body/div[3]/div/div[2]/div/article/div[2]/section[1]/span[2]/button/span').click()
-                        comment_box = tab.find_element_by_xpath(
-                            '/html/body/div[3]/div/div[2]/div/article/div[2]/section[3]/div/form/textarea')
+                    comments += 1
+                    tab.find_element_by_xpath("//*[name()='svg'][@aria-label='Comment']").click()
+                    comment_box = tab.find_element_by_xpath("//*[name()='textarea'][@aria-label='Add a comment…']")
 
-                        if (comm_prob < 7):
-                            comment_box.send_keys('Really cool!')
-                            sleep(1)
-                        elif (comm_prob > 6) and (comm_prob < 9):
-                            comment_box.send_keys('Nice work :)')
-                            sleep(1)
-                        elif comm_prob == 9:
-                            comment_box.send_keys('Nice gallery!!')
-                            sleep(1)
-                        elif comm_prob == 10:
-                            comment_box.send_keys('So cool! :)')
-                            sleep(1)
-                        # Enter to post comment
-                        comment_box.send_keys(Keys.ENTER)
-                        sleep(randint(22, 28))
+                    if comm_prob < 7:
+                        comment_box.send_keys('Really cool!')
+                        sleep(1)
+                    elif (comm_prob > 6) and (comm_prob < 9):
+                        comment_box.send_keys('Nice work :)')
+                        sleep(1)
+                    elif comm_prob == 9:
+                        comment_box.send_keys('Nice gallery!!')
+                        sleep(1)
+                    elif comm_prob == 10:
+                        comment_box.send_keys('So cool! :)')
+                        sleep(1)
+                    # Enter to post comment
+                    comment_box.send_keys(Keys.ENTER)
+                    sleep(randint(22, 28))
 
                 # Next picture
                 tab.find_element_by_link_text('Next').click()
