@@ -6,3 +6,5 @@ mydatastore/*
 chromedriver
 *.txt
 *.json
+*.csv
+
