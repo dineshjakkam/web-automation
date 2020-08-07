@@ -26,7 +26,7 @@ notnow = tab.find_element_by_xpath('//button[normalize-space()="Not Now"]')
 notnow.click() #comment these last 2 lines out, if you don't get a pop up asking about notifications
 
 
-hashtag_list = ['balayya']
+hashtag_list = []
 
 prev_user_list = [] # if it's the first time you run it, use this line and comment the two below
 #prev_user_list = pd.read_csv('20181203-224633_users_followed_list.csv', delimiter=',').iloc[:,
