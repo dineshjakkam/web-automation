@@ -29,8 +29,7 @@ notnow.click()  # comment these last 2 lines out, if you don't get a pop up aski
 post_site = "https://www.instagram.com/america_nri_la_frustration/"
 
 prev_user_list = []  # if it's the first time you run it, use this line and comment the two below
-# prev_user_list = pd.read_csv('20181203-224633_users_followed_list.csv', delimiter=',').iloc[:,
-#                1:2]  # useful to build a user log
+# prev_user_list = pd.read_csv('20181203-224633_users_followed_list.csv', delimiter=',').iloc[:, 1:2]  # useful to build
 # prev_user_list = list(prev_user_list['0'])
 
 new_followed = []
@@ -38,73 +37,48 @@ followed = 0
 likes = 0
 comments = 0
 tab.get(post_site)
+next_pic = 0
 sleep(5)
-try:
-    first_thumbnail = tab.find_element_by_xpath(
-        '//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div/div/a/div')
-    first_thumbnail.click()
-    sleep(randint(2, 4))
 
-    commented_users = tab.find_element_by_class_name("Nm9Fw").find_element_by_tag_name('button').click()
-    sleep(randint(1, 5))
-    commented_users = tab.find_elements_by_class_name("Jv7Aj.MqpiF  ")
-    users = []
-    for user in commented_users:
-        users.append(deepcopy(user.text))
-    print(users)
-    for user in users:
-        sleep(randint(1, 10))
-        link = "https://www.instagram.com/"+user+'/'
-        tab.get(link)
+while True:
+    try:
+        if next_pic == 5:
+            break
+        first_thumbnail = tab.find_element_by_xpath(
+            '//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div/div/a/div')
+        first_thumbnail.click()
+        sleep(randint(2, 10))
 
-    if user not in prev_user_list:
-        # If we already follow, do not unfollow
-        if tab.find_element_by_class_name("bY2yH").find_element_by_tag_name('button').text == 'Follow':
+        commented_users = tab.find_element_by_class_name("Nm9Fw").find_element_by_tag_name('button').click()
+        sleep(randint(1, 3))
+        commented_users = tab.find_elements_by_class_name("Jv7Aj.MqpiF  ")
+        users = []
+        for user in commented_users:
+            users.append(deepcopy(user.text))
+        print(users)
+        for user in users:
+            sleep(randint(1, 15))
+            link = "https://www.instagram.com/" + user + '/'
+            tab.get(link)
 
-            tab.find_element_by_class_name("bY2yH").find_element_by_tag_name('button').click()
-
-            new_followed.append(username)
-            followed += 1
-
-            # Liking the picture
-            button_like = tab.find_element_by_xpath("//*[name()='svg'][@aria-label='Like']")
-
-            button_like.click()
-            likes += 1
-            sleep(randint(5, 10))
-
-            # Comments and tracker
-            comm_prob = randint(1, 10)
-            print('{}_{}: {}'.format(hashtag, x, comm_prob))
-            comments += 1
-            tab.find_element_by_xpath("//*[name()='svg'][@aria-label='Comment']").click()
-            comment_box = tab.find_element_by_xpath("//*[name()='textarea'][@aria-label='Add a comment…']")
-
-            if comm_prob < 7:
-                comment_box.send_keys('Really cool!')
-                sleep(1)
-            elif (comm_prob > 6) and (comm_prob < 9):
-                comment_box.send_keys('Nice work :)')
-                sleep(1)
-            elif comm_prob == 9:
-                comment_box.send_keys('Nice gallery!!')
-                sleep(1)
-            elif comm_prob == 10:
-                comment_box.send_keys('So cool! :)')
-                sleep(1)
-            # Enter to post comment
-            comment_box.send_keys(Keys.ENTER)
-            sleep(randint(22, 28))
-
-        # Next picture
+            if user not in prev_user_list:
+                # If we already follow, do not unfollow
+                try:
+                    follow_button = tab.find_element_by_xpath('//button[normalize-space()="Follow"]')
+                    follow_button.click()
+                    new_followed.append(user)
+                    followed += 1
+                except Exception as e:
+                    print(e)
+                    print("continuing...")
+                    continue
+                sleep(randint(20, 26))
         tab.find_element_by_link_text('Next').click()
+        next_pic += 1
         sleep(randint(25, 29))
-    else:
-        tab.find_element_by_link_text('Next').click()
-        sleep(randint(20, 26))
-# some hashtag stops refreshing photos (it may happen sometimes), it continues to the next
-except Exception as e:
-    print(e)
+    # some hashtag stops refreshing photos (it may happen sometimes), it continues to the next
+    except Exception as e:
+        print(e)
 
 for n in range(0, len(new_followed)):
     prev_user_list.append(new_followed[n])
